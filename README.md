@@ -12,7 +12,8 @@ This repository provides R codes used for fitting EMOS and quantile regression p
 - `DualModelQR_fit.R`: Main script to fit semi-local quantile regression models
 
 ## Other files
-- `XY.csv`: Information of SYNOP stations used in the study
+- `station_data.csv`: Information of SYNOP stations (latitude, longitude, station elevation) used in the study 
+  
 
 ## Data availability
 The wind speed ensemble and observation data used in the study is not provided due to data sharing policies.
