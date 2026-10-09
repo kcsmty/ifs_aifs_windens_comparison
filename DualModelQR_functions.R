@@ -103,7 +103,7 @@ QRfit <- function(EnsQ10, EnsQ50, EnsQ90, obs, taus){
         qmod <- try(rq(log(obs + 0.01) ~ EnsQ10 + EnsQ50 + EnsQ90,
                        tau = taus, method = 'fn'))
         
-        if(inherits(qmod, "try_error")){
+        if(inherits(qmod, "try-error")){
           model <- 5
         }
       }
