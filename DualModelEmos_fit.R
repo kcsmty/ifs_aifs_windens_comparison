@@ -63,7 +63,7 @@ lambda <- 0.001
 # ------ Fit local EMOS models ------
 
 # Set up clusters for parallel modeling
-ncores <- detectCores() - 4 # not to overload the computer
+ncores <- max(1, detectCores() - 4)
 c1 <- makeCluster(ncores)
 registerDoParallel(c1)
 
