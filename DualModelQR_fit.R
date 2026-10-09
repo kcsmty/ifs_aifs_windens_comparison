@@ -1,4 +1,5 @@
 library(quantregGrowth)
+library(quantreg)
 library(doParallel)
 library(foreach)
 library(progress)
@@ -55,8 +56,8 @@ n_clust <- 100
 n_feat <- 24
 
 # Set up parallel computation
-cores <- detectCores()
-c1 <- makeCluster(cores - 4) # not to overload the computer
+ncores <- max(1, detectCores() - 4)
+c1 <- makeCluster(ncores)
 registerDoParallel(c1)
 
 # Modeling for each lead time
@@ -70,7 +71,7 @@ for(lt in 1:nLeadTimes){
   
   # Parallel modeling for each forecast date taking the lead time into account
   # Output: Three dimensional array with quantile regression predictions for each forecast date and station at the current lead time
-  QRS <- foreach(d = (tr_len + lt):nDates, .combine = 'acomb3', .multicombine = TRUE, .packages = c("quantregGrowth")) %dopar% {
+  QRS <- foreach(d = (tr_len + lt):nDates, .combine = 'acomb3', .multicombine = TRUE, .packages = c("quantregGrowth", "quantreg")) %dopar% {
     
     # Set seed for reproducibility
     set.seed(d * 104729)
@@ -213,10 +214,10 @@ for(lt in 1:nLeadTimes){
   QRS <- aperm(QRS, perm = c(3, 1, 2))
   
   # Set the names of the forecast dates
-  dimnames(QRS)[[1]] <- fDates[lt:93]
+  dimnames(QRS)[[1]] <- fDates[lt:nfDates]
   
   # Load observations into the array of results
-  QRS[,,"obs"] <- windDataSumlt[fDates[lt:93],,"obs"]
+  QRS[,,"obs"] <- windDataSumlt[fDates[lt:nfDates],,"obs"]
   
   # Save results
   saveRDS(QRS, file = paste0(results_path, "windQR", LeadTimes[lt], ".rds"))
@@ -233,5 +234,4 @@ for(lt in 1:nLeadTimes){
 stopCluster(c1)
 
 # Garbage collection
-gc() 
-  
+gc()
