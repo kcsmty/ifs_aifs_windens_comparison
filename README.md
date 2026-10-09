@@ -1,4 +1,4 @@
-# ifs_aifs_wind
+# ifs_aifs_windens_comparison
 
 Repository for the paper "A global evaluation of ECMWF's operational IFS and AIFS wind speed ensemble forecasts"
 
